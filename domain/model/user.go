@@ -15,7 +15,7 @@ type User struct {
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime;type:datetime;not null;default:CURRENT_TIMESTAMP"`
 	CreatedBy int64     `gorm:"column:created_by;type:varchar(225);not null" json:"created_by,omitempty"`
 	UpdatedAt time.Time `gorm:"column:updated_at;autoUpdateTime;type:datetime;not null;default:CURRENT_TIMESTAMP"`
-	UpdatedBy int64     `gorm:"column:updated_by;type:varchar(225);not null" json:"updated_at,omitempty`
+	UpdatedBy int64     `gorm:"column:updated_by;type:int;not null" json:"updated_at,omitempty"`
 }
 
 type UserClaims struct {
