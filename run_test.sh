@@ -1,0 +1,1 @@
+$env:ENV='stage'; go test

@@ -1,0 +1,3 @@
+[runners.docker]
+    image = "golang:latest"
+    services = ["mysql:latest", "postgres:latest"]

@@ -1,0 +1,41 @@
+{
+    "app": {
+        "port": "10001",
+        "secretKey": "secret"
+    },
+    "googleSheet": {
+        "type": "1",
+        "spreadsheetId": "test",
+        "spreadsheetName": "test",
+        "spreadsheetDescription": "test",
+        "spreadsheetColumnReadRange": "test"
+    },
+    "database": {
+        "db": {
+            "name": "my_project",
+            "host": "localhost",
+            "port": "5432",
+            "user": "project",
+            "password": "MyPassword_123"
+        }
+    },
+    "tulusTech": {
+        "header": {
+            "contentType": "application/json"
+        },
+        "host": "https://tulus.fun",
+        "token": "aBH20WFbfJRNr0oji4n6mE7fWfebd8mVYxfjpc1y"
+    },
+    "data": {
+        "source": "googlesheet"
+    },
+    "pubsub": {
+        "projectID": "sonic-charmer-337916"
+    },
+    "serviceBus": {
+        "namespace": "Endpoint=sb://gra-sb-gateway.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=3k7vB9LCiVW5zWtpyJoGHmLTy4SrLPsk6+ASbNdCwpU="
+    },
+    "logger": {
+        "format": "2006-02-01"
+    }
+}
