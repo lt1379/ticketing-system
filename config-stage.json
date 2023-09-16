@@ -11,10 +11,17 @@
         "spreadsheetColumnReadRange": "test"
     },
     "database": {
-        "db": {
+        "psql": {
             "name": "my_project",
             "host": "localhost",
             "port": "5432",
+            "user": "project",
+            "password": "MyPassword_123"
+        },
+        "mysql": {
+            "name": "my_project",
+            "host": "localhost",
+            "port": "3306",
             "user": "project",
             "password": "MyPassword_123"
         }

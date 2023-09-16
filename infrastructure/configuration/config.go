@@ -29,7 +29,8 @@ type App struct {
 type Database struct {
 	Openapi     OpenapiDb     `json:"openapi"`
 	Controlroom ControlroomDb `json:"controlroom"`
-	Db          Db            `json:"db"`
+	Psql        Db            `json:"psql"`
+	MySql       Db            `json:"mysql"`
 }
 
 type GoogleSheet struct {
@@ -154,22 +155,21 @@ func getConfig() string {
 	if env != "" {
 		name = fmt.Sprintf("%s-%s", name, env)
 	}
-	fmt.Println("Name", name)
 	return name
 }
 
 func initDatabase(C *Config) {
-	logger.GetLogger().WithField("Database", C.Database.Db).Info("Database configuration")
-	if C.Database.Db.Name == "" {
-		C.Database.Db.Name = os.Getenv("DB_NAME")
+	logger.GetLogger().WithField("Database", C.Database.Psql).Info("Database configuration")
+	if C.Database.Psql.Name == "" {
+		C.Database.Psql.Name = os.Getenv("DB_NAME")
 	}
-	if C.Database.Db.Host == "" {
-		C.Database.Db.Host = os.Getenv("DB_HOST")
+	if C.Database.Psql.Host == "" {
+		C.Database.Psql.Host = os.Getenv("DB_HOST")
 	}
-	if C.Database.Db.Password == "" {
-		C.Database.Db.Password = os.Getenv("DB_PASSWORD")
+	if C.Database.Psql.Password == "" {
+		C.Database.Psql.Password = os.Getenv("DB_PASSWORD")
 	}
-	if C.Database.Db.Port == "" {
-		C.Database.Db.Port = os.Getenv("DB_PORT")
+	if C.Database.Psql.Port == "" {
+		C.Database.Psql.Port = os.Getenv("DB_PORT")
 	}
 }
