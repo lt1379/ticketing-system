@@ -21,11 +21,13 @@ func init() {
 	}
 	layout := "2006-01-02"
 	env := os.Getenv("ENV")
+	fmt.Println("ENV", env)
 	formatTime := time.Now().Format(layout)
 	// file, err := os.OpenFile(filepath.Join(cwd, fmt.Sprintf("%s%s-%s%s", "logs/", formatTime, env, ".log")), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-
-	logger.Out = os.Stdout
-	if env == "prod" {
+	if env == "stage" {
+		logger.Out = os.Stdout
+	}
+	if env == "prod" || env == "" {
 		file, err := os.OpenFile(filepath.Join(cwd, fmt.Sprintf("%s%s%s%s", "logs/", formatTime, env, ".log")), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err != nil {
 			log.Info("Failed to log to file, using default stderr")

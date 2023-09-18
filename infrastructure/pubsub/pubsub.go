@@ -7,7 +7,6 @@ import (
 	"sync"
 
 	"cloud.google.com/go/pubsub"
-	"google.golang.org/api/option"
 )
 
 var (
@@ -29,11 +28,10 @@ type PubSubHandler struct {
 type Handler func(ctx context.Context, msg *pubsub.Message)
 
 func NewPubSub(ctx context.Context, projectID string) (*pubsub.Client, error) {
-	client, err := pubsub.NewClient(ctx, projectID, option.WithCredentialsFile("./serviceAccount.json"))
+	client, err := pubsub.NewClient(ctx, projectID)
 	if err != nil {
 		return nil, err
 	}
-	// defer client.Close()
 
 	log.Printf("PubSub connected...")
 	return client, err

@@ -12,7 +12,7 @@ import (
 )
 
 func NewPostgreSQLDb() (*sql.DB, error) {
-	cfg := configuration.C.Database.Db
+	cfg := configuration.C.Database.Psql
 
 	port, err := strconv.Atoi(cfg.Port)
 	if err != nil {

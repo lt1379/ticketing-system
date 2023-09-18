@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"my-project/domain/model"
+	"my-project/infrastructure/logger"
 	"my-project/usecase"
 	"net/http"
 
@@ -29,7 +30,9 @@ func (userHandler *UserHandler) Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Printf("An error occurred: %v", err)
+		logger.GetLogger().WithField("error", err).Error("An error occurred")
 		c.JSON(http.StatusBadRequest, fmt.Sprintf("An error occurred: %v", err.Error()))
+		return
 	}
 
 	res := userHandler.userUsecase.Login(c.Request.Context(), req)

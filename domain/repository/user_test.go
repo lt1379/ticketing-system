@@ -1,5 +1,7 @@
 package repository
 
-func Test_GetById() {
+import "testing"
+
+func Test_GetById(t *testing.T) {
 
 }
