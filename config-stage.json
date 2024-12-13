@@ -24,6 +24,13 @@
             "port": "3306",
             "user": "project",
             "password": "MyPassword_123"
+        },
+        "mongodb": {
+            "name": "my_project",
+            "host": "localhost",
+            "user": "lamboksimamora",
+            "password": "jh3phXNg43i5Zkjt",
+            "url": "mongodb+srv://lamboksimamora:jh3phXNg43i5Zkjt@cluster0.vz5ln.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
         }
     },
     "tulusTech": {
@@ -41,6 +48,13 @@
     },
     "serviceBus": {
         "namespace": "Endpoint=sb://gra-sb-gateway.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=3k7vB9LCiVW5zWtpyJoGHmLTy4SrLPsk6+ASbNdCwpU="
+    },
+    "redisClient": {
+        "username": "default",
+        "password": "fpMXvxaTGiYmCsAbBxcnAhcGApSpKN0E",
+        "host": "redis-18200.c56.east-us.azure.redns.redis-cloud.com",
+        "port": "18200",
+        "databaseName": "cache-M4LG2M2D"
     },
     "logger": {
         "format": "2006-02-01"

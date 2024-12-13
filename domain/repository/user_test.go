@@ -1,7 +1,11 @@
-package repository
+package repository_test
 
-import "testing"
+import (
+	"my-project/infrastructure/persistence"
+	"testing"
+)
 
 func Test_GetById(t *testing.T) {
-
+	db, _ := persistence.NewNativeDb()
+	db.Close()
 }

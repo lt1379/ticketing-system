@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"my-project/infrastructure/cache"
 	tulushost "my-project/infrastructure/clients/tulustech"
 	"my-project/infrastructure/configuration"
 	"my-project/infrastructure/logger"
@@ -32,6 +33,7 @@ func recoverPanic() {
 }
 
 func main() {
+	InitiateGoroutine()
 	defer recoverPanic()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
@@ -57,7 +59,7 @@ func main() {
 	pubSubClient, err := pubsub.NewPubSub(ctx, configuration.C.Pubsub.ProjectID)
 	if err != nil {
 		logger.GetLogger().WithField("error", err).Error("Error while instantiate PubSub")
-		panic(err)
+		// panic(err)
 	}
 
 	azServiceBusClient, err := servicebus.NewServiceBus(ctx, configuration.C.ServiceBus.Namespace)
@@ -65,6 +67,11 @@ func main() {
 		logger.GetLogger().WithField("error", err).Error("Error while instantiate ServiceBus")
 		panic(err)
 	}
+	redisClient, _ := cache.NewCache(ctx, fmt.Sprintf("%s:%s", configuration.C.RedisClient.Host, configuration.C.RedisClient.Port), configuration.C.RedisClient.Username, configuration.C.RedisClient.Password)
+
+	testCache := cache.NewTestCache(redisClient)
+
+	logger.GetLogger().Info("Redis client initialized successfully.")
 
 	tulusTechHost := tulushost.NewTulusHost(configuration.C.TulusTech.Host)
 
@@ -73,7 +80,9 @@ func main() {
 
 	userRepository := persistence.NewUserRepository(psqlDb)
 	userUsecase := usecase.NewUserUsecase(userRepository)
-	testUsecase := usecase.NewTestUsecase(tulusTechHost, testPubSub, testServiceBus)
+	testUsecase := usecase.NewTestUsecase(tulusTechHost, testPubSub, testServiceBus, testCache)
+	testRes := testUsecase.Test(ctx)
+	fmt.Println("Test response", testRes)
 
 	userHandler := httpHandler.NewUserHandler(userUsecase)
 	testHandler := httpHandler.NewTestHandler(testUsecase)

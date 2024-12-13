@@ -17,6 +17,7 @@ type Config struct {
 	Data             Data             `json:"data"`
 	Pubsub           Pubsub           `json:"pubsub"`
 	ServiceBus       ServiceBus       `json:"serviceBus"`
+	RedisClient      RedisClient      `json:"redisClient"`
 	Logger           Logger           `json:"logger"`
 	ControlroomProxy ControlroomProxy `json:"controlroomProxy"`
 }
@@ -110,6 +111,14 @@ type Pubsub struct {
 
 type ServiceBus struct {
 	Namespace string `json:"namespace"`
+}
+
+type RedisClient struct {
+	Host         string `json:"host"`
+	Port         string `json:"port"`
+	Password     string `json:"password"`
+	DatabaseName int    `json:"databaseName"`
+	Username     string `json:"username"`
 }
 
 type Logger struct {
