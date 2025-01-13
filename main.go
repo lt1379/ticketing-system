@@ -120,7 +120,6 @@ func main() {
 	case <-interrupt:
 		fmt.Println("Exit")
 		os.Exit(1)
-		break
 	case <-ctx.Done():
 		break
 	}
