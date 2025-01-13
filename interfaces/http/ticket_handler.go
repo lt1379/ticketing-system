@@ -26,6 +26,17 @@ func (t TicketHandler) GetAll(context *gin.Context) {
 		return
 	}
 
+	req.PageSize = max(req.PageSize, 10)
+	req.PageSize = min(req.PageSize, 50)
+
+	if (req.PageSize % 10) < 6 {
+		req.PageSize -= req.PageSize % 10
+	} else {
+		req.PageSize += (10 - (req.PageSize % 10))
+	}
+
+	logger.GetLogger().WithField("req", req).Info("processing request")
+
 	res, err := t.ticketUsecase.GetAll(context.Request.Context(), req)
 	if err != nil {
 		logger.GetLogger().WithField("error", err.Error()).Error("failed to get ticket")
