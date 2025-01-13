@@ -3,7 +3,6 @@ package main
 import (
 	"my-project/domain/repository"
 	httpHandler "my-project/interfaces/http"
-	"my-project/interfaces/middleware"
 	"net/http"
 	"time"
 
@@ -11,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitiateRouter(userHandler httpHandler.IUserHandler, testHandler httpHandler.ITestHandler, userRepository repository.IUser) *gin.Engine {
+func InitiateRouter(userHandler httpHandler.IUserHandler, testHandler httpHandler.ITestHandler, tickerHandler httpHandler.ITicketHandler, userRepository repository.IUser) *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Recovery())
 	router.Use(cors.New(cors.Config{
@@ -27,10 +26,12 @@ func InitiateRouter(userHandler httpHandler.IUserHandler, testHandler httpHandle
 	}))
 
 	api := router.Group("api")
-	api.Use(middleware.Auth(userRepository))
+	//api.Use(middleware.Auth(userRepository))
 
 	router.POST("/login", userHandler.Login)
 	router.POST("/register", userHandler.Register)
+
+	api.POST("/tickets", tickerHandler.Create)
 
 	router.POST("/healthz", testHandler.Test)
 

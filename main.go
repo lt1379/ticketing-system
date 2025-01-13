@@ -33,7 +33,7 @@ func recoverPanic() {
 }
 
 func main() {
-	InitiateGoroutine()
+	//InitiateGoroutine()
 	defer recoverPanic()
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
@@ -65,7 +65,7 @@ func main() {
 	azServiceBusClient, err := servicebus.NewServiceBus(ctx, configuration.C.ServiceBus.Namespace)
 	if err != nil {
 		logger.GetLogger().WithField("error", err).Error("Error while instantiate ServiceBus")
-		panic(err)
+		//panic(err)
 	}
 	redisClient, _ := cache.NewCache(ctx, fmt.Sprintf("%s:%s", configuration.C.RedisClient.Host, configuration.C.RedisClient.Port), configuration.C.RedisClient.Username, configuration.C.RedisClient.Password)
 
@@ -81,13 +81,16 @@ func main() {
 	userRepository := persistence.NewUserRepository(psqlDb)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	testUsecase := usecase.NewTestUsecase(tulusTechHost, testPubSub, testServiceBus, testCache)
-	testRes := testUsecase.Test(ctx)
-	fmt.Println("Test response", testRes)
+	//testRes := testUsecase.Test(ctx)
+	ticketRepository := persistence.NewTicketRepository(mysqlDb)
+	ticketUsecase := usecase.NewTicketUsecase(ticketRepository)
+	//fmt.Println("Test response", testRes)
 
 	userHandler := httpHandler.NewUserHandler(userUsecase)
 	testHandler := httpHandler.NewTestHandler(testUsecase)
+	ticketHandler := httpHandler.NewTicketHandler(ticketUsecase)
 
-	router := InitiateRouter(userHandler, testHandler, userRepository)
+	router := InitiateRouter(userHandler, testHandler, ticketHandler, userRepository)
 
 	if err != nil {
 		logger.GetLogger().WithField("error", err).Error("Error while StartSubscription")
