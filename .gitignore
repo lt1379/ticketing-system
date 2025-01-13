@@ -26,4 +26,4 @@ logs
 
 tmp/*
 
-issues
+issues.DS_Store
