@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Ticket struct {
-	Id        int64      `json:"id"`
+	Id        int64      `json:"id,omitempty"`
 	Title     string     `json:"title"`
 	Message   string     `json:"message"`
 	UserId    int        `json:"user_id"`

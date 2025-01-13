@@ -11,10 +11,29 @@ import (
 
 type ITicketHandler interface {
 	Create(*gin.Context)
+	GetAll(*gin.Context)
 }
 
 type TicketHandler struct {
 	ticketUsecase usecase.ITicketUsecase
+}
+
+func (t TicketHandler) GetAll(context *gin.Context) {
+	var req dto.RequestPagination
+	if err := context.ShouldBindJSON(&req); err != nil {
+		logger.GetLogger().WithField("error", err.Error()).Error("failed to bind request")
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	res, err := t.ticketUsecase.GetAll(context.Request.Context(), req)
+	if err != nil {
+		logger.GetLogger().WithField("error", err.Error()).Error("failed to get ticket")
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, res)
 }
 
 func (t TicketHandler) Create(c *gin.Context) {

@@ -32,6 +32,7 @@ func InitiateRouter(userHandler httpHandler.IUserHandler, testHandler httpHandle
 	router.POST("/register", userHandler.Register)
 
 	api.POST("/tickets", tickerHandler.Create)
+	api.GET("/tickets", tickerHandler.GetAll)
 
 	router.POST("/healthz", testHandler.Test)
 
