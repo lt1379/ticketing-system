@@ -130,16 +130,18 @@ func generateQuery(pagination dto.RequestPagination) (string, []interface{}, err
 	}
 	queryBuilder.WriteString(" ")
 	//Order By
-	if pagination.Sort.Name == "created_at" {
-		queryBuilder.WriteString("ORDER BY created_at")
-	} else {
-		queryBuilder.WriteString("ORDER BY user_id")
-	}
-	queryBuilder.WriteString(" ")
-	if pagination.Sort.Dir == "asc" {
-		queryBuilder.WriteString("ASC")
-	} else {
-		queryBuilder.WriteString("DESC")
+	if pagination.Sort != nil {
+		if pagination.Sort.Name == "created_at" {
+			queryBuilder.WriteString("ORDER BY created_at")
+		} else {
+			queryBuilder.WriteString("ORDER BY user_id")
+		}
+		queryBuilder.WriteString(" ")
+		if pagination.Sort.Dir == "asc" {
+			queryBuilder.WriteString("ASC")
+		} else {
+			queryBuilder.WriteString("DESC")
+		}
 	}
 	queryBuilder.WriteString(" ")
 

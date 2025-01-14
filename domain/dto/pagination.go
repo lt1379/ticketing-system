@@ -9,6 +9,6 @@ type Pagination struct {
 
 type RequestPagination struct {
 	Filter   *Filter `json:"filter,omitempty"`
-	Sort     Sort    `json:"sort"`
+	Sort     *Sort   `json:"sort,omitempty"`
 	PageSize int     `json:"page_size"`
 }
