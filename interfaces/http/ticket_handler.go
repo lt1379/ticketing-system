@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"math"
 	"my-project/domain/dto"
 	"my-project/domain/model"
 	"my-project/infrastructure/logger"
@@ -22,10 +23,17 @@ type TicketHandler struct {
 }
 
 func (t TicketHandler) GetAll(context *gin.Context) {
+	var res dto.Res
+
 	var req dto.RequestPagination
 	if err := context.ShouldBindJSON(&req); err != nil {
 		logger.GetLogger().WithField("error", err.Error()).Error("failed to bind request")
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		res.ResponseCode = "400"
+		res.ResponseMessage = "Bad Request"
+		res.Meta = err.Error()
+
+		context.JSON(http.StatusBadRequest, res)
 		return
 	}
 
@@ -42,17 +50,36 @@ func (t TicketHandler) GetAll(context *gin.Context) {
 	if err := validate.Struct(req); err != nil {
 		logger.GetLogger().WithField("error", err.Error()).Error("failed to validate request")
 
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		res.ResponseCode = "400"
+		res.ResponseMessage = "Bad Request"
+		res.Meta = err.Error()
+
+		context.JSON(http.StatusBadRequest, res)
 		return
 	}
 
 	logger.GetLogger().WithField("req", req).Info("processing request")
 
-	res, err := t.ticketUsecase.GetAll(context.Request.Context(), req)
+	response, err := t.ticketUsecase.GetAll(context.Request.Context(), req)
 	if err != nil {
 		logger.GetLogger().WithField("error", err.Error()).Error("failed to get ticket")
-		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+
+		res.ResponseCode = "500"
+		res.ResponseMessage = "Internal Server Error"
+		res.Meta = err.Error()
+
+		context.JSON(http.StatusInternalServerError, res)
 		return
+	}
+
+	res.ResponseCode = "200"
+	res.ResponseMessage = "Success"
+	res.Data = response
+	res.Meta = dto.Pagination{
+		PageNumber:  1,
+		PerPage:     req.PageSize,
+		TotalPage:   int(math.Ceil(float64(len(response)) / float64(req.PageSize))),
+		TotalRecord: len(response),
 	}
 
 	context.JSON(http.StatusOK, res)
