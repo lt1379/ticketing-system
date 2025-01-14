@@ -16,67 +16,11 @@ type TicketRepository struct {
 }
 
 func (t *TicketRepository) GetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error) {
-	var queryBuilder strings.Builder
-	var params []interface{}
-	queryBuilder.WriteString("SELECT ticket.title, ticket.message, ticket.user_id, ticket.status, ticket.created_at FROM ticket")
-	queryBuilder.WriteString(" ")
-	//Where
-	if pagination.Filter != nil {
-		queryBuilder.WriteString(" WHERE ")
-		filter := *pagination.Filter
-		if filter.Type == "before" {
-			queryBuilder.WriteString("ticket.created_at < ?")
-			parseTime, err := time.Parse("2006-01-02", filter.Value)
-			if err != nil {
-				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
-				return nil, 0, err
-			}
-			params = append(params, parseTime)
-		} else if filter.Type == "after" {
-			queryBuilder.WriteString("ticket.created_at > ?")
-			parseTime, err := time.Parse("2006-01-02", filter.Value)
-			if err != nil {
-				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
-				return nil, 0, err
-			}
-			params = append(params, parseTime)
-		} else {
-			queryBuilder.WriteString("ticket.created_at BETWEEN ? AND ?")
-			parseTime, err := time.Parse("2006-01-02", filter.Value)
-			if err != nil {
-				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
-				return nil, 0, err
-			}
-			parseTime2, err := time.Parse("2006-01-02", filter.Value2)
-			if err != nil {
-				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
-				return nil, 0, err
-			}
-			params = append(params, parseTime)
-			params = append(params, parseTime2)
-		}
+	query, params, err := generateQuery(pagination)
+	if err != nil {
+		logger.GetLogger().WithField("error", err).Error("Error while generate query")
+		return nil, 0, err
 	}
-	queryBuilder.WriteString(" ")
-	//Order By
-	if pagination.Sort.Name == "created_at" {
-		queryBuilder.WriteString("ORDER BY created_at")
-	} else {
-		queryBuilder.WriteString("ORDER BY user_id")
-	}
-	queryBuilder.WriteString(" ")
-	if pagination.Sort.Dir == "asc" {
-		queryBuilder.WriteString("ASC")
-	} else {
-		queryBuilder.WriteString("DESC")
-	}
-	queryBuilder.WriteString(" ")
-
-	//LIMIT
-	queryBuilder.WriteString("LIMIT ? OFFSET ?")
-	params = append(params, pagination.PageSize)
-	params = append(params, 0)
-
-	query := queryBuilder.String()
 	logger.GetLogger().WithField("query", query).WithField("params", params).Info("query")
 	statement, err := t.sqlDB.PrepareContext(ctx, query)
 	if err != nil {
@@ -141,6 +85,70 @@ func (t *TicketRepository) Create(ctx context.Context, ticket model.Ticket) (int
 	}
 
 	return res.LastInsertId()
+}
+
+func generateQuery(pagination dto.RequestPagination) (string, []interface{}, error) {
+	var queryBuilder strings.Builder
+	var params []interface{}
+	queryBuilder.WriteString("SELECT ticket.title, ticket.message, ticket.user_id, ticket.status, ticket.created_at FROM ticket")
+	queryBuilder.WriteString(" ")
+	//Where
+	if pagination.Filter != nil {
+		queryBuilder.WriteString(" WHERE ")
+		filter := *pagination.Filter
+		if filter.Type == "before" {
+			queryBuilder.WriteString("ticket.created_at < ?")
+			parseTime, err := time.Parse("2006-01-02", filter.Value)
+			if err != nil {
+				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
+				return "", nil, err
+			}
+			params = append(params, parseTime)
+		} else if filter.Type == "after" {
+			queryBuilder.WriteString("ticket.created_at > ?")
+			parseTime, err := time.Parse("2006-01-02", filter.Value)
+			if err != nil {
+				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
+				return "", nil, err
+			}
+			params = append(params, parseTime)
+		} else {
+			queryBuilder.WriteString("ticket.created_at BETWEEN ? AND ?")
+			parseTime, err := time.Parse("2006-01-02", filter.Value)
+			if err != nil {
+				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
+				return "", nil, err
+			}
+			parseTime2, err := time.Parse("2006-01-02", filter.Value2)
+			if err != nil {
+				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
+				return "", nil, err
+			}
+			params = append(params, parseTime)
+			params = append(params, parseTime2)
+		}
+	}
+	queryBuilder.WriteString(" ")
+	//Order By
+	if pagination.Sort.Name == "created_at" {
+		queryBuilder.WriteString("ORDER BY created_at")
+	} else {
+		queryBuilder.WriteString("ORDER BY user_id")
+	}
+	queryBuilder.WriteString(" ")
+	if pagination.Sort.Dir == "asc" {
+		queryBuilder.WriteString("ASC")
+	} else {
+		queryBuilder.WriteString("DESC")
+	}
+	queryBuilder.WriteString(" ")
+
+	//LIMIT
+	queryBuilder.WriteString("LIMIT ? OFFSET ?")
+	params = append(params, pagination.PageSize)
+	params = append(params, 0)
+
+	return queryBuilder.String(), params, nil
 }
 
 func NewTicketRepository(db *sql.DB) repository.ITicketRepository {

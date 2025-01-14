@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"my-project/domain/dto"
 	"my-project/domain/model"
 	"my-project/infrastructure/logger"
@@ -32,7 +33,15 @@ func (t TicketHandler) GetAll(context *gin.Context) {
 	if (req.PageSize % 10) < 6 {
 		req.PageSize -= req.PageSize % 10
 	} else {
-		req.PageSize += (10 - (req.PageSize % 10))
+		req.PageSize += 10 - (req.PageSize % 10)
+	}
+
+	validate := validator.New()
+	if err := validate.Struct(req); err != nil {
+		logger.GetLogger().WithField("error", err.Error()).Error("failed to validate request")
+
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	logger.GetLogger().WithField("req", req).Info("processing request")
