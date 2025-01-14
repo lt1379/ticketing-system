@@ -6,6 +6,7 @@ import (
 	"my-project/domain/model"
 	"my-project/domain/repository"
 	"my-project/infrastructure/logger"
+	"time"
 )
 
 type ITicketUsecase interface {
@@ -31,10 +32,15 @@ func (t TicketUsecase) GetAll(ctx context.Context, pagination dto.RequestPaginat
 }
 
 func (t TicketUsecase) Create(ctx context.Context, ticket model.Ticket) (model.Ticket, error) {
+	now := time.Now()
+
+	ticket.Status = string(model.Open)
+	ticket.CreatedAt = &now
 	lastInsertedId, err := t.ticketRepository.Create(ctx, ticket)
 	if err != nil {
 		return model.Ticket{}, err
 	}
+	ticket.Status = model.MapStatusTicket[model.Status(ticket.Status)]
 	ticket.Id = lastInsertedId
 	return ticket, nil
 }

@@ -65,7 +65,7 @@ func (t *TicketRepository) GetAll(ctx context.Context, pagination dto.RequestPag
 }
 
 func (t *TicketRepository) Create(ctx context.Context, ticket model.Ticket) (int64, error) {
-	statement, err := t.sqlDB.PrepareContext(ctx, `INSERT INTO ticket (title, message, user_id) VALUES (?, ?, ?)`)
+	statement, err := t.sqlDB.PrepareContext(ctx, `INSERT INTO ticket (title, message, user_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)`)
 
 	if err != nil {
 		logger.GetLogger().WithField("error", err).Error("Error while prepare statement")
@@ -78,7 +78,7 @@ func (t *TicketRepository) Create(ctx context.Context, ticket model.Ticket) (int
 		}
 	}(statement)
 
-	res, err := statement.Exec(ticket.Title, ticket.Message, ticket.UserId)
+	res, err := statement.Exec(ticket.Title, ticket.Message, ticket.UserId, ticket.Status, ticket.CreatedAt, ticket.CreatedAt)
 	if err != nil {
 		logger.GetLogger().WithField("error", err).Error("Error execute query")
 		return 0, err
