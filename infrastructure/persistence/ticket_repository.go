@@ -18,7 +18,7 @@ type TicketRepository struct {
 func (t *TicketRepository) GetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error) {
 	var queryBuilder strings.Builder
 	var params []interface{}
-	queryBuilder.WriteString("SELECT ticket.title, ticket.message, ticket.user_id, ticket.created_at FROM ticket")
+	queryBuilder.WriteString("SELECT ticket.title, ticket.message, ticket.user_id, ticket.status, ticket.created_at FROM ticket")
 	queryBuilder.WriteString(" ")
 	//Where
 	if pagination.Filter != nil {
@@ -105,10 +105,11 @@ func (t *TicketRepository) GetAll(ctx context.Context, pagination dto.RequestPag
 	var tickets []model.Ticket
 	for rows.Next() {
 		ticket := model.Ticket{}
-		err := rows.Scan(&ticket.Title, &ticket.Message, &ticket.UserId, &ticket.CreatedAt)
+		err := rows.Scan(&ticket.Title, &ticket.Message, &ticket.UserId, &ticket.Status, &ticket.CreatedAt)
 		if err != nil {
 			logger.GetLogger().WithField("error", err).Error("Error while scan row")
 		}
+		ticket.Status = model.MapStatusTicket[model.Status(ticket.Status)]
 		tickets = append(tickets, ticket)
 	}
 	err = rows.Err()

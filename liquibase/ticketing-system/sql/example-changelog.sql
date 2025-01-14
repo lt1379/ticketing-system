@@ -17,3 +17,9 @@ CREATE TABLE `ticket`
 
 --rollback DROP TABLE `ticket`;
 
+--changeset lamboktulussimamora:2 labels:modify context:dev
+--comment: added column status
+ALTER TABLE `ticket`
+    ADD COLUMN `status` VARCHAR(3) NOT NULL DEFAULT 'opn' AFTER `user_id`;
+
+--rollback ALTER TABLE `ticketing_system`.`ticket` DROP COLUMN `status`;
