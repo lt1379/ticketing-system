@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"my-project/domain/model"
+	"github.com/lts1379/ticketing-system/domain/model"
 )
 
 type IUser interface {

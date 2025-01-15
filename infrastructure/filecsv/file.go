@@ -1,7 +1,7 @@
 package filecsv
 
 import (
-	"my-project/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 	"os"
 )
 

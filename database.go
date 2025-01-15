@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
-	"my-project/infrastructure/logger"
-	"my-project/infrastructure/persistence"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/persistence"
 )
 
 func InitiateDatabase() (*sql.DB, *sql.DB, error) {

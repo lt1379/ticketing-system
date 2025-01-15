@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"my-project/domain/model"
-	"my-project/domain/repository"
-	"my-project/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/domain/model"
+	"github.com/lts1379/ticketing-system/domain/repository"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 )
 
 type UserRepository struct {

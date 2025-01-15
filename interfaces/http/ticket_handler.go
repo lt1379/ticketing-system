@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/lts1379/ticketing-system/domain/dto"
+	"github.com/lts1379/ticketing-system/domain/model"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/usecase"
 	"math"
-	"my-project/domain/dto"
-	"my-project/domain/model"
-	"my-project/infrastructure/logger"
-	"my-project/usecase"
 	"net/http"
 )
 

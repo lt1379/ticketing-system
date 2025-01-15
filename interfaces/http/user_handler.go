@@ -3,10 +3,10 @@ package http
 import (
 	"crypto/md5"
 	"fmt"
+	"github.com/lts1379/ticketing-system/domain/model"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/usecase"
 	"log"
-	"my-project/domain/model"
-	"my-project/infrastructure/logger"
-	"my-project/usecase"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

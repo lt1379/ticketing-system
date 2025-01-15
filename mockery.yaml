@@ -1,10 +1,11 @@
-with-expecter: true
+quiet: False
+disable-version-string: True
+with-expecter: True
+mockname: "Mock{{.InterfaceName}}"
+filename: "mock_{{.MockName}}.go"
+outpkg: mocks
 packages:
-  my-project/domain/repository:
-    # place your package-specific config here
-    config:
+  github.com/lt1379/ticketing-system/domain/repository:
     interfaces:
-      # select the interfaces you want mocked
-      IUser:
-        # Modify package-level config for this specific interface (if applicable)
-        config:
+      ITicketRepository:
+# Lots more config...

@@ -4,12 +4,12 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
-	"my-project/domain/dto"
-	"my-project/domain/model"
-	"my-project/domain/repository"
-	"my-project/infrastructure/configuration"
-	"my-project/infrastructure/logger"
-	"my-project/infrastructure/utils"
+	"github.com/lts1379/ticketing-system/domain/dto"
+	"github.com/lts1379/ticketing-system/domain/model"
+	"github.com/lts1379/ticketing-system/domain/repository"
+	"github.com/lts1379/ticketing-system/infrastructure/configuration"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/utils"
 	"time"
 )
 

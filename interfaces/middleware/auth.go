@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"fmt"
+	"github.com/lts1379/ticketing-system/domain/dto"
+	"github.com/lts1379/ticketing-system/domain/model"
+	"github.com/lts1379/ticketing-system/domain/repository"
 	"log"
-	"my-project/domain/dto"
-	"my-project/domain/model"
-	"my-project/domain/repository"
 	"net/http"
 	"os"
 	"strings"

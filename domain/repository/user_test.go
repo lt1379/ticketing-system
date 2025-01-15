@@ -1,7 +1,7 @@
 package repository_test
 
 import (
-	"my-project/infrastructure/persistence"
+	"github.com/lts1379/ticketing-system/infrastructure/persistence"
 	"testing"
 )
 

@@ -2,7 +2,7 @@ package configuration
 
 import (
 	"fmt"
-	"my-project/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 	"os"
 
 	"github.com/spf13/viper"

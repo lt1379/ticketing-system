@@ -1,8 +1,8 @@
 package main
 
 import (
-	"my-project/domain/repository"
-	httpHandler "my-project/interfaces/http"
+	"github.com/lts1379/ticketing-system/domain/repository"
+	httpHandler "github.com/lts1379/ticketing-system/interfaces/http"
 	"net/http"
 	"time"
 

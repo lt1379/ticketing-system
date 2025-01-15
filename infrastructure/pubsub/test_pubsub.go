@@ -2,8 +2,8 @@ package pubsub
 
 import (
 	"context"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 	"log"
-	"my-project/infrastructure/logger"
 
 	"cloud.google.com/go/pubsub"
 )

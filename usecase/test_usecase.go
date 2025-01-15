@@ -3,13 +3,13 @@ package usecase
 import (
 	"context"
 	"encoding/json"
-	"my-project/domain/dto"
-	"my-project/infrastructure/cache"
-	tulushost "my-project/infrastructure/clients/tulustech"
-	"my-project/infrastructure/clients/tulustech/models"
-	"my-project/infrastructure/logger"
-	"my-project/infrastructure/pubsub"
-	"my-project/infrastructure/servicebus"
+	"github.com/lts1379/ticketing-system/domain/dto"
+	"github.com/lts1379/ticketing-system/infrastructure/cache"
+	tulushost "github.com/lts1379/ticketing-system/infrastructure/clients/tulustech"
+	"github.com/lts1379/ticketing-system/infrastructure/clients/tulustech/models"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/pubsub"
+	"github.com/lts1379/ticketing-system/infrastructure/servicebus"
 )
 
 type ITestUsecase interface {

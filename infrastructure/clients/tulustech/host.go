@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"my-project/infrastructure/clients"
-	"my-project/infrastructure/clients/tulustech/models"
+	"github.com/lts1379/ticketing-system/infrastructure/clients"
+	"github.com/lts1379/ticketing-system/infrastructure/clients/tulustech/models"
 )
 
 type ITulusHost interface {

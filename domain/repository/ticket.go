@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"my-project/domain/dto"
-	"my-project/domain/model"
+	"github.com/lts1379/ticketing-system/domain/dto"
+	"github.com/lts1379/ticketing-system/domain/model"
 )
 
 type ITicketRepository interface {

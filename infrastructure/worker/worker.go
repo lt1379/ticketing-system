@@ -3,8 +3,8 @@ package worker
 import (
 	"database/sql"
 	"fmt"
+	"github.com/lts1379/ticketing-system/domain/model"
 	"log"
-	"my-project/domain/model"
 	"sync"
 	"time"
 )

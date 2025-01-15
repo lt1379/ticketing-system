@@ -4,7 +4,7 @@ package repomocks
 
 import (
 	context "context"
-	model "my-project/domain/model"
+	model "github.com/lts1379/ticketing-system/domain/model"
 
 	mock "github.com/stretchr/testify/mock"
 )

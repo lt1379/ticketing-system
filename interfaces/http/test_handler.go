@@ -1,7 +1,7 @@
 package http
 
 import (
-	"my-project/usecase"
+	"github.com/lts1379/ticketing-system/usecase"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

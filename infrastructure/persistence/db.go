@@ -2,8 +2,8 @@ package persistence
 
 import (
 	"fmt"
+	"github.com/lts1379/ticketing-system/infrastructure/configuration"
 	"log"
-	"my-project/infrastructure/configuration"
 	"os"
 	"time"
 

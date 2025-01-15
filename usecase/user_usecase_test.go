@@ -5,9 +5,9 @@ import (
 	"crypto/md5"
 	"database/sql"
 	"fmt"
-	"my-project/domain/model"
-	"my-project/mocks/repomocks"
-	"my-project/usecase"
+	"github.com/lts1379/ticketing-system/domain/model"
+	"github.com/lts1379/ticketing-system/mocks/repomocks"
+	"github.com/lts1379/ticketing-system/usecase"
 	"testing"
 	"time"
 

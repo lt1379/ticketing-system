@@ -3,7 +3,7 @@ package servicebus
 import (
 	"context"
 	"fmt"
-	"my-project/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus"
 )

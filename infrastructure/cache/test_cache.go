@@ -2,8 +2,8 @@ package cache
 
 import (
 	"context"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 	"github.com/redis/go-redis/v9"
-	"my-project/infrastructure/logger"
 	"time"
 )
 

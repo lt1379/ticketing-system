@@ -1,4 +1,4 @@
-module my-project
+module github.com/lts1379/ticketing-system
 
 go 1.22.7
 

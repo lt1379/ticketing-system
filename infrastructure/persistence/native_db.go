@@ -3,7 +3,7 @@ package persistence
 import (
 	"database/sql"
 	"fmt"
-	"my-project/infrastructure/configuration"
+	"github.com/lts1379/ticketing-system/infrastructure/configuration"
 	"time"
 )
 

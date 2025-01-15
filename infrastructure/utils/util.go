@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"my-project/infrastructure/logger"
+	"github.com/lts1379/ticketing-system/infrastructure/logger"
 	"time"
 
 	"github.com/golang-jwt/jwt"
