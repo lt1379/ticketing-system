@@ -32,7 +32,13 @@ func (t TicketUsecase) GetAll(ctx context.Context, pagination dto.RequestPaginat
 }
 
 func (t TicketUsecase) Create(ctx context.Context, ticket model.Ticket) (model.Ticket, error) {
-	now := time.Now()
+	// Load the location for the timezone
+	loc, err := time.LoadLocation("Asia/Jakarta")
+	if err != nil {
+		logger.GetLogger().WithField("error", err.Error()).Error("time.LoadLocation")
+		return model.Ticket{}, err
+	}
+	now := time.Now().In(loc)
 
 	ticket.Status = string(model.Open)
 	ticket.CreatedAt = &now
