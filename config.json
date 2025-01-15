@@ -19,11 +19,11 @@
             "password": "MyPassword_123"
         },
         "mysql": {
-            "name": "my_project",
-            "host": "localhost",
+            "name": "ticketing_system",
+            "host": "db",
             "port": "3306",
-            "user": "project",
-            "password": "MyPassword_123"
+            "user": "root",
+            "password": "root123"
         }
     },
     "tulusTech": {
