@@ -39,8 +39,32 @@ liquibase init project --project-dir=ticketing-system --changelog-file=example-c
 ```
 
 ## Usage
+1. Using the terminal, navigate to the project directory.
 ```aiignore
 ENV=stage go run .
+```
+2. If you want to use docker compose, run the following command:
+```aiignore
+docker-compose up --build
+```
+3. To reset docker compose, run the following command:
+```aiignore
+docker-compose down
+```
+4. Using MySQL Workbench, connect to the MySQL database using the following credentials:
+```aiignore
+Host: localhost
+Port: 3308
+Username: root
+Password: root123
+```
+5. Using Postman, send a POST request to http://localhost:10002/tickets/create with the following JSON body:
+```json
+{
+    "ticket_title": "Software Not working 39",
+    "ticket_msg": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.</p>",
+    "user_id": 39
+}
 ```
 
 ## License
