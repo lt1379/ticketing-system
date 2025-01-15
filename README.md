@@ -66,6 +66,21 @@ Password: root123
     "user_id": 39
 }
 ```
+6. Using Postman, send a POST request to http://localhost:10002/tickets with the following JSON body:
+```json
+{
+    "filter": {
+    "filter_name": "created_at",
+    "filter_type": "before",
+    "filter_value": "2025-01-18"
+    },
+    "sort": {
+    "sort_name": "created_at",
+    "sort_dir": "desC"
+    },
+    "page_size": 50
+}
+```
 
 ## License
 MIT License
