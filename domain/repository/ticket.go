@@ -9,4 +9,5 @@ import (
 type ITicketRepository interface {
 	Create(ctx context.Context, ticket model.Ticket) (int64, error)
 	GetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error)
+	WorkerGetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error)
 }

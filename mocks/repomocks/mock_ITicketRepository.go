@@ -81,6 +81,43 @@ func (_m *ITicketRepository) GetAll(ctx context.Context, pagination dto.RequestP
 	return r0, r1, r2
 }
 
+// WorkerGetAll provides a mock function with given fields: ctx, pagination
+func (_m *ITicketRepository) WorkerGetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error) {
+	ret := _m.Called(ctx, pagination)
+
+	if len(ret) == 0 {
+		panic("no return value specified for WorkerGetAll")
+	}
+
+	var r0 []model.Ticket
+	var r1 int64
+	var r2 error
+	if rf, ok := ret.Get(0).(func(context.Context, dto.RequestPagination) ([]model.Ticket, int64, error)); ok {
+		return rf(ctx, pagination)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, dto.RequestPagination) []model.Ticket); ok {
+		r0 = rf(ctx, pagination)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.Ticket)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, dto.RequestPagination) int64); ok {
+		r1 = rf(ctx, pagination)
+	} else {
+		r1 = ret.Get(1).(int64)
+	}
+
+	if rf, ok := ret.Get(2).(func(context.Context, dto.RequestPagination) error); ok {
+		r2 = rf(ctx, pagination)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
+
 // NewITicketRepository creates a new instance of ITicketRepository. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewITicketRepository(t interface {

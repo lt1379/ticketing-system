@@ -19,7 +19,16 @@ type TicketUsecase struct {
 }
 
 func (t TicketUsecase) GetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, error) {
-	res, _, err := t.ticketRepository.GetAll(ctx, pagination)
+	var res []model.Ticket
+	var count int64
+	var err error
+
+	if pagination.PageSize >= 50 {
+		res, count, err = t.ticketRepository.WorkerGetAll(ctx, pagination)
+	} else {
+		res, count, err = t.ticketRepository.GetAll(ctx, pagination)
+	}
+	logger.GetLogger().WithField("res", res).WithField("count", count).Info("ticketRepository.GetAll")
 	if err != nil {
 		logger.GetLogger().WithField("error", err.Error()).Error("ticketRepository.GetAll")
 		return nil, err

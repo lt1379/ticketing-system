@@ -8,7 +8,8 @@ type Pagination struct {
 }
 
 type RequestPagination struct {
-	Filter   *Filter `json:"filter,omitempty"`
-	Sort     *Sort   `json:"sort,omitempty"`
-	PageSize int     `json:"page_size"`
+	Filter     *Filter `json:"filter,omitempty"`
+	Sort       *Sort   `json:"sort,omitempty"`
+	PageSize   int     `json:"page_size"`
+	PageNumber int     `json:"page_number" binding:"-"`
 }

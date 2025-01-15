@@ -7,7 +7,9 @@ import (
 	"github.com/lts1379/ticketing-system/domain/model"
 	"github.com/lts1379/ticketing-system/domain/repository"
 	"github.com/lts1379/ticketing-system/infrastructure/logger"
+	"math"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -49,7 +51,7 @@ func (t *TicketRepository) GetAll(ctx context.Context, pagination dto.RequestPag
 	var tickets []model.Ticket
 	for rows.Next() {
 		ticket := model.Ticket{}
-		err := rows.Scan(&ticket.Title, &ticket.Message, &ticket.UserId, &ticket.Status, &ticket.CreatedAt)
+		err := rows.Scan(&ticket.Id, &ticket.Title, &ticket.Message, &ticket.UserId, &ticket.Status, &ticket.CreatedAt)
 		if err != nil {
 			logger.GetLogger().WithField("error", err).Error("Error while scan row")
 		}
@@ -87,18 +89,31 @@ func (t *TicketRepository) Create(ctx context.Context, ticket model.Ticket) (int
 	return res.LastInsertId()
 }
 
+func (t *TicketRepository) WorkerGetAll(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error) {
+	resultI := worker(pagination, func(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error) {
+		return t.GetAll(ctx, pagination)
+	})
+	result, ok := resultI.([]model.Ticket)
+	if !ok {
+		logger.GetLogger().WithField("error", "Error while casting result").Error("Error while casting result")
+		return nil, 0, nil
+	}
+	return result, int64(len(result)), nil
+}
+
 func generateQuery(pagination dto.RequestPagination) (string, []interface{}, error) {
 	var queryBuilder strings.Builder
 	var params []interface{}
-	queryBuilder.WriteString("SELECT ticket.title, ticket.message, ticket.user_id, ticket.status, ticket.created_at FROM ticket")
+	queryBuilder.WriteString("SELECT ticket.Id, ticket.title, ticket.message, ticket.user_id, ticket.status, ticket.created_at FROM ticket")
 	queryBuilder.WriteString(" ")
 	//Where
 	if pagination.Filter != nil {
 		queryBuilder.WriteString(" WHERE ")
 		filter := *pagination.Filter
+		layout := "2006-01-02"
 		if filter.Type == "before" {
 			queryBuilder.WriteString("ticket.created_at < ?")
-			parseTime, err := time.Parse("2006-01-02", filter.Value)
+			parseTime, err := time.Parse(layout, filter.Value)
 			if err != nil {
 				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
 				return "", nil, err
@@ -106,7 +121,7 @@ func generateQuery(pagination dto.RequestPagination) (string, []interface{}, err
 			params = append(params, parseTime)
 		} else if filter.Type == "after" {
 			queryBuilder.WriteString("ticket.created_at > ?")
-			parseTime, err := time.Parse("2006-01-02", filter.Value)
+			parseTime, err := time.Parse(layout, filter.Value)
 			if err != nil {
 				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
 				return "", nil, err
@@ -114,12 +129,12 @@ func generateQuery(pagination dto.RequestPagination) (string, []interface{}, err
 			params = append(params, parseTime)
 		} else {
 			queryBuilder.WriteString("ticket.created_at BETWEEN ? AND ?")
-			parseTime, err := time.Parse("2006-01-02", filter.Value)
+			parseTime, err := time.Parse(layout, filter.Value)
 			if err != nil {
 				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
 				return "", nil, err
 			}
-			parseTime2, err := time.Parse("2006-01-02", filter.Value2)
+			parseTime2, err := time.Parse(layout, filter.Value2)
 			if err != nil {
 				logger.GetLogger().WithField("error", err).Error("error parsing ticket.created_at")
 				return "", nil, err
@@ -148,9 +163,64 @@ func generateQuery(pagination dto.RequestPagination) (string, []interface{}, err
 	//LIMIT
 	queryBuilder.WriteString("LIMIT ? OFFSET ?")
 	params = append(params, pagination.PageSize)
-	params = append(params, 0)
+	params = append(params, pagination.PageNumber)
 
 	return queryBuilder.String(), params, nil
+}
+
+func worker(pagination dto.RequestPagination, operation func(ctx context.Context, pagination dto.RequestPagination) ([]model.Ticket, int64, error)) interface{} {
+	wg := &sync.WaitGroup{}
+
+	var queries []dto.RequestPagination
+
+	perPage := 10
+
+	pageSize := pagination.PageSize
+	numberOfPage := math.Ceil(float64(pageSize) / float64(perPage))
+	numberOfWorker := int(numberOfPage)
+	errChan := make(chan error, numberOfWorker)
+
+	for i := 0; i < numberOfWorker; i++ {
+		query := pagination
+		query.PageSize = perPage
+		if pageSize%perPage != 0 && i == numberOfWorker-1 {
+			query.PageSize = int(pageSize % perPage)
+		}
+		query.PageNumber = i * perPage
+		queries = append(queries, query)
+	}
+
+	ticketResults := make([][]model.Ticket, numberOfWorker)
+
+	for i := 0; i < numberOfWorker; i++ {
+		wg.Add(1)
+		go func(idx int) {
+			defer wg.Done()
+			query := queries[i]
+			query.PageSize = perPage
+			if pageSize%perPage != 0 && i == numberOfWorker-1 {
+				query.PageSize = int(pageSize % perPage)
+			}
+			tickets, _, err := operation(context.Background(), query)
+			if err != nil {
+				logger.GetLogger().WithField("error", err).Error("Error while operation")
+				errChan <- err
+				return
+			}
+			ticketResults[i] = tickets
+		}(i)
+	}
+
+	wg.Wait()
+
+	close(errChan)
+
+	var tickets []model.Ticket
+	for _, ticketResult := range ticketResults {
+		tickets = append(tickets, ticketResult...)
+	}
+
+	return tickets
 }
 
 func NewTicketRepository(db *sql.DB) repository.ITicketRepository {
