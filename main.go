@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/lts1379/ticketing-system/infrastructure/cache"
 	tulushost "github.com/lts1379/ticketing-system/infrastructure/clients/tulustech"
@@ -112,7 +113,7 @@ func main() {
 			ReadTimeout:  0,
 			WriteTimeout: 0,
 		}
-		if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
+		if err := httpServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			return err
 		}
 		logger.GetLogger().WithField("port", port).Error("Application start")
