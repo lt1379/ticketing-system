@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_GetById(t *testing.T) {
+func TestGetById(t *testing.T) {
 	db, _ := persistence.NewNativeDb()
 	db.Close()
 }

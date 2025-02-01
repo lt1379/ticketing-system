@@ -19,10 +19,10 @@ type IUserUsecase interface {
 }
 
 type UserUsecase struct {
-	userRepository repository.IUser
+	userRepository repository.IUserRepository
 }
 
-func NewUserUsecase(userRepository repository.IUser) IUserUsecase {
+func NewUserUsecase(userRepository repository.IUserRepository) IUserUsecase {
 	return &UserUsecase{userRepository: userRepository}
 }
 

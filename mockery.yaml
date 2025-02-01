@@ -8,4 +8,5 @@ packages:
   github.com/lt1379/ticketing-system/domain/repository:
     interfaces:
       ITicketRepository:
+      IUserRepository:
 # Lots more config...

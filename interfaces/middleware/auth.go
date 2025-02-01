@@ -14,7 +14,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func Auth(userRepository repository.IUser) gin.HandlerFunc {
+func Auth(userRepository repository.IUserRepository) gin.HandlerFunc {
 
 	var res dto.Res
 	res.ResponseCode = "401"

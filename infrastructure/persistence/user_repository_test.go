@@ -19,7 +19,7 @@ import (
 type Suite struct {
 	suite.Suite
 	mock       sqlmock.Sqlmock
-	repository repository.IUser
+	repository repository.IUserRepository
 }
 
 func (s *Suite) SetupSuite() {

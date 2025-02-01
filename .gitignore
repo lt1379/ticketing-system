@@ -27,3 +27,4 @@ logs
 tmp/*
 
 issues.DS_Store
+/.scannerwork/
